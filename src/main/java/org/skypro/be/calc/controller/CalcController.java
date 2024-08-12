@@ -1,6 +1,5 @@
 package org.skypro.be.calc.controller;
 
-import org.skypro.be.calc.service.CalcService;
 import org.skypro.be.calc.service.PageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class CalcController {
     PageService pageService;
 
-    public CalcController(CalcService calcService) {
+    public CalcController(PageService calcService) {
         this.pageService = calcService;
     }
 
