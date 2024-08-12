@@ -37,7 +37,10 @@ public enum Operator {
             case ADD -> a + b;
             case SUB -> a - b;
             case MUL -> a * b;
-            case DIV -> a / b;
+            case DIV -> {
+                if (b == 0) {throw new IllegalArgumentException("Division by zero is not allowed");}
+                yield a / b;
+            }
             case POW -> Math.pow(a, b);
         };
     }
