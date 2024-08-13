@@ -1,7 +1,7 @@
 package org.skypro.be.calc.service;
 
 public interface PageService {
-    String getAnswerMessage(String o, String num1, String num2);
+    String getAnswerMessage(String o, double num1, double num2);
 
     String getGreetingMessage();
 

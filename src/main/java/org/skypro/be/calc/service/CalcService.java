@@ -8,12 +8,12 @@ import java.text.DecimalFormat;
 public class CalcService implements PageService {
 
     @Override
-    public String getAnswerMessage(String o, String num1, String num2) {
+    public String getAnswerMessage(String o, double num1, double num2) {
         try {
             Operator operator = Operator.getByName(o);
-            double a = Double.parseDouble(num1);
-            double b = Double.parseDouble(num2);
-            return this.formatResultMessage(a, b, operator, operator.calculate(a, b));
+//            double a = Double.parseDouble(num1);
+//            double b = Double.parseDouble(num2);
+            return this.formatResultMessage(num1, num2, operator, operator.calculate(num1, num2));
         } catch (IllegalArgumentException | ArithmeticException e) {
             return this.formatErrorMessage(e.getMessage());
         }
@@ -59,9 +59,11 @@ public class CalcService implements PageService {
     }
 
     private String formatResultMessage(double a, double b, Operator operator, double result) {
-        DecimalFormat df = new DecimalFormat("#.########");
-        df.setGroupingUsed(true);
+        DecimalFormat df = new DecimalFormat();
         df.setDecimalSeparatorAlwaysShown(false);
+        df.setGroupingUsed(true);
+        df.setGroupingSize(3);
+        df.setMaximumFractionDigits(8);
         return new StringBuilder().append(this.getCalcTitle())
                 .append("<h3><b>")
                 .append(String.format("Результат: %s %s %s = %s", df.format(a), operator.getSymbol(), df.format(b),
