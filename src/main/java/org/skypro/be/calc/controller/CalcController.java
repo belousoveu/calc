@@ -1,43 +1,29 @@
 package org.skypro.be.calc.controller;
 
-import org.skypro.be.calc.service.PageService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.skypro.be.calc.service.CalcService;
+import org.skypro.be.calc.utils.ResponseFormatter;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
-import java.lang.annotation.Target;
 
 
 @RestController
+@RequestMapping("/calc")
 public class CalcController {
-    PageService pageService;
+    CalcService calcService;
 
-    public CalcController(PageService calcService) {
-        this.pageService = calcService;
+    public CalcController(CalcService calcService) {
+        this.calcService = calcService;
     }
 
-    @GetMapping()
-    public String getGreetingMessage() {
-        return pageService.getGreetingMessage();
-    }
-
-    @GetMapping({"/calc", "/calc/"})
+    @GetMapping("")
     public String getCalcMessage() {
-        return pageService.getPageGreetingMessage();
+        return ResponseFormatter.getCalcGreetingMessage();
     }
 
-    @GetMapping("/calc/{operator}")
-    public String getCalc(@PathVariable String operator, @RequestParam("num1") double num1, @RequestParam("num2") double num2) {
-        return pageService.getAnswerMessage(operator, num1, num2);
+    @GetMapping("/{operator}")
+    public String getCalc(@PathVariable String operator, @RequestParam double num1, @RequestParam double num2) {
+        double result = calcService.calculate(operator, num1, num2);
+        return ResponseFormatter.getCalcResultMessage(calcService.getOperatorSymbol(operator), num1, num2, result);
     }
 
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MissingServletRequestParameterException.class, MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<String> handleMissingParams(Exception ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pageService.getErrorMessage(ex.getMessage()));
-    }
 }
 
